@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,5 +26,8 @@ public class Product {
 
     @Column(name="create_time", nullable = false)
     private LocalDateTime createTime;
+
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "")
+    //private Set<Purchase> purchaseList;
 
 }
