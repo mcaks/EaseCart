@@ -1,6 +1,6 @@
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import Catalog from "../../features/catalog/Catalog";
-import Header from "./Header";
+import Header from "./Header.tsx";
 import { useState } from "react";
 
 function App() {

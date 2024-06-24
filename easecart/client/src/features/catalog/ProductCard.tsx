@@ -17,7 +17,7 @@ export default function ProductCard({product}: Props){
     const formatPrice = (price: number): string =>{
       return new Intl.NumberFormat('en-In', {
         style:'currency',
-        currency: 'INR',
+        currency: 'EUR',
         minimumFractionDigits: 2
       }).format(price);
     }
