@@ -11,7 +11,7 @@ axios.interceptors.response.use(async response=>{
     await idle();
     return response
 }, (error: AxiosError)=>{
-    const {status} = error.response as AxiosResponse; 
+    const {status} = error.response as AxiosResponse;
     switch(status){
         case 404:
             toast.error("Resource not found");
