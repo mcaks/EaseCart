@@ -1,6 +1,6 @@
 package com.ecommerce.easecart.repository;
 
-import com.ecommerce.easecart.entitiy.Brand;
+import com.ecommerce.easecart.entity.Brand;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

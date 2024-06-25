@@ -1,7 +1,7 @@
 package com.ecommerce.easecart.service;
 
-import com.ecommerce.easecart.entitiy.Basket;
-import com.ecommerce.easecart.entitiy.BasketItem;
+import com.ecommerce.easecart.entity.Basket;
+import com.ecommerce.easecart.entity.BasketItem;
 import com.ecommerce.easecart.model.BasketItemResponse;
 import com.ecommerce.easecart.model.BasketResponse;
 import com.ecommerce.easecart.repository.BasketRepository;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Log4j2
-public class BasketServiceImpl implements BasketService{
+public class BasketServiceImpl implements BasketService {
     private final BasketRepository basketRepository;
 
     public BasketServiceImpl(BasketRepository basketRepository) {
@@ -25,7 +25,7 @@ public class BasketServiceImpl implements BasketService{
     public List<BasketResponse> getAllBaskets() {
         log.info("Fetching All Baskets");
         List<Basket> basketList = (List<Basket>) basketRepository.findAll();
-        //now we will use stream operator to map with response
+        // now we will use stream operator to map with response
         List<BasketResponse> basketResponses = basketList.stream()
                 .map(this::convertToBasketResponse)
                 .collect(Collectors.toList());
@@ -37,11 +37,11 @@ public class BasketServiceImpl implements BasketService{
     public BasketResponse getBasketById(String basketId) {
         log.info("Fetching Basket by Id: {}", basketId);
         Optional<Basket> basketOptional = basketRepository.findById(basketId);
-        if(basketOptional.isPresent()){
+        if (basketOptional.isPresent()) {
             Basket basket = basketOptional.get();
             log.info("Fetched Basket by Id: {}", basketId);
             return convertToBasketResponse(basket);
-        }else{
+        } else {
             log.info("Basket with Id: {} not found", basketId);
             return null;
         }
@@ -63,7 +63,7 @@ public class BasketServiceImpl implements BasketService{
     }
 
     private BasketResponse convertToBasketResponse(Basket basket) {
-        if(basket == null){
+        if (basket == null) {
             return null;
         }
         List<BasketItemResponse> itemResponses = basket.getItems().stream()

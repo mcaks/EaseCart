@@ -1,8 +1,7 @@
 package com.ecommerce.easecart.controller;
 
-import com.ecommerce.easecart.model.BrandResponse;
-import com.ecommerce.easecart.model.ProductResponse;
-import com.ecommerce.easecart.model.TypeResponse;
+import com.ecommerce.easecart.model.*;
+
 import com.ecommerce.easecart.service.BrandService;
 import com.ecommerce.easecart.service.ProductService;
 import com.ecommerce.easecart.service.TypeService;
@@ -30,10 +29,11 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable("id")Integer productId){
-        ProductResponse productResponse = productService.getProductById(productId);
+    public ResponseEntity<com.ecommerce.easecart.model.ProductResponse> getProductById(@PathVariable("id") Integer productId) {
+        com.ecommerce.easecart.model.ProductResponse productResponse = productService.getProductById(productId);
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
+
     @GetMapping()
     public ResponseEntity<Page<ProductResponse>> getProducts(
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -42,25 +42,44 @@ public class ProductController {
             @RequestParam(name = "brandId", required = false) Integer brandId,
             @RequestParam(name = "typeId", required = false) Integer typeId,
             @RequestParam(name = "sort", defaultValue = "name") String sort,
-            @RequestParam(name = "order", defaultValue = "asc") String order
-    ){
-        //Convert order to Sort direction
-        Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC: Sort.Direction.ASC;
+            @RequestParam(name = "order", defaultValue = "asc") String order) {
+        Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sorting = Sort.by(direction, sort);
         Pageable pageable = PageRequest.of(page, size, sorting);
 
         Page<ProductResponse> productResponses = productService.getProducts(pageable, brandId, typeId, keyword);
         return new ResponseEntity<>(productResponses, HttpStatus.OK);
     }
+
     @GetMapping("/brands")
-    public ResponseEntity<List<BrandResponse>> getBrands(){
+    public ResponseEntity<List<BrandResponse>> getBrands() {
         List<BrandResponse> brandResponses = brandService.getAllBrands();
         return new ResponseEntity<>(brandResponses, HttpStatus.OK);
     }
 
+    @PostMapping("/brands")
+    public ResponseEntity<BrandResponse> createBrand(@RequestBody BrandRequest brandRequest) {
+        BrandResponse brandResponse = brandService.addBrand(brandRequest);
+        return new ResponseEntity<>(brandResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/types")
+    public ResponseEntity<TypeResponse> createType(@RequestBody TypeRequest typeRequest) {
+        TypeResponse typeResponse = typeService.addType(typeRequest);
+        return new ResponseEntity<>(typeResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+        ProductResponse productResponse = productService.addProduct(productRequest);
+        return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
+    }
+
     @GetMapping("/types")
-    public ResponseEntity<List<TypeResponse>> getTypes(){
+    public ResponseEntity<List<TypeResponse>> getTypes() {
         List<TypeResponse> typeResponses = typeService.getAllTypes();
         return new ResponseEntity<>(typeResponses, HttpStatus.OK);
     }
+
+
 }

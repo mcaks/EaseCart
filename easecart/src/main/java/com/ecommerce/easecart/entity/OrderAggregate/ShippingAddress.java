@@ -1,4 +1,4 @@
-package com.ecommerce.easecart.entitiy.OrderAggregate;
+package com.ecommerce.easecart.entity.OrderAggregate;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

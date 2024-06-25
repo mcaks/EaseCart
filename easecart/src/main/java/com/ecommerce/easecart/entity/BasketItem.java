@@ -1,9 +1,11 @@
-package com.ecommerce.easecart.entitiy;
+package com.ecommerce.easecart.entity;
 
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.springframework.data.redis.core.RedisHash;
 
 @Data
+@RedisHash("BasketItem")
 public class BasketItem {
     @Id
     private Integer id;

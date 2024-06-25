@@ -1,8 +1,8 @@
 package com.ecommerce.easecart.controller;
 
-import com.ecommerce.sportscenter.model.JwtRequest;
-import com.ecommerce.sportscenter.model.JwtResponse;
-import com.ecommerce.sportscenter.security.JwtHelper;
+import com.ecommerce.easecart.model.JwtRequest;
+import com.ecommerce.easecart.model.JwtResponse;
+import com.ecommerce.easecart.security.JwtHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request){
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
         this.authenticate(request.getUsername(), request.getPassword());
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         String token = this.jwtHelper.generateToken(userDetails);
@@ -38,30 +38,30 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<UserDetails> getUserDetails(@RequestHeader("Authorization") String tokenHeader){
+    public ResponseEntity<UserDetails> getUserDetails(@RequestHeader("Authorization") String tokenHeader) {
         String token = extractTokenFromHeader(tokenHeader);
-        if(token!=null){
+        if (token != null) {
             String username = jwtHelper.getUserNameFromToken(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             return new ResponseEntity<>(userDetails, HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     private String extractTokenFromHeader(String tokenHeader) {
-        if(tokenHeader!=null && tokenHeader.startsWith("Bearer ")){
+        if (tokenHeader != null && tokenHeader.startsWith("Bearer ")) {
             return tokenHeader.substring(7); // Removing Bearer
         }
         return null;
     }
 
     private void authenticate(String username, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        try{
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+                password);
+        try {
             manager.authenticate(authenticationToken);
-        }
-        catch(BadCredentialsException ex){
+        } catch (BadCredentialsException ex) {
             throw new BadCredentialsException("Invalid UserName or Password");
         }
     }

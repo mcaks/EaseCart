@@ -1,4 +1,4 @@
-package com.ecommerce.easecart.entitiy;
+package com.ecommerce.easecart.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name="Brand")
+@Table(name = "Type")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Brand {
+public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Id")
+    @Column(name = "Id")
     private Integer id;
-    @Column(name="Name")
+    @Column(name = "Name")
     private String name;
-    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     private List<Product> prodcts;
 }

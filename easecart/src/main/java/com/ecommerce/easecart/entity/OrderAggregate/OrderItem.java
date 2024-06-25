@@ -1,4 +1,4 @@
-package com.ecommerce.easecart.entitiy.OrderAggregate;
+package com.ecommerce.easecart.entity.OrderAggregate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="OrderItem")
+@Table(name = "OrderItem")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,17 +15,17 @@ import lombok.NoArgsConstructor;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Id")
+    @Column(name = "Id")
     private Integer id;
 
     @Embedded
     private ProductItemOrdered itemOrdered;
-    @Column(name="Price")
+    @Column(name = "Price")
     private Long price;
-    @Column(name="Quantity")
+    @Column(name = "Quantity")
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="order_id")
+    @JoinColumn(name = "order_id")
     private Order order;
 }

@@ -15,7 +15,7 @@ axios.interceptors.response.use(async response=>{
     await idle();
     return response
 }, (error: AxiosError)=>{
-    const {status} = error.response as AxiosResponse;
+    const {status} = error.response as AxiosResponse; 
     switch(status){
         case 404:
             toast.error("Resource not found");
@@ -41,14 +41,14 @@ const requests = {
 const Store = {
     apiUrl: 'http://localhost:8081/api/products',
     list:(page: number, size: number, brandId?: number, typeId?: number, url?: string)=> {
-        let requestUrl = url || `products?page=${page-1}&size=${size}`;
-        if(brandId!==undefined){
-            requestUrl += `&brandId=${brandId}`;
-        }
-        if(typeId!==undefined){
-            requestUrl += `&typeId=${typeId}`;
-        }
-        return requests.get(requestUrl);
+      let requestUrl = url || `products?page=${page-1}&size=${size}`;
+      if(brandId!==undefined){
+        requestUrl += `&brandId=${brandId}`;
+      }
+      if(typeId!==undefined){
+        requestUrl += `&typeId=${typeId}`;
+      }
+      return requests.get(requestUrl);
     },
     details:(id: number) => requests.get(`products/${id}`),
     types: () => requests.get('products/types').then(types => [{ id: 0, name: 'All' }, ...types]),
@@ -85,47 +85,54 @@ const Basket = {
     },
     incrementItemQuantity: async (itemId: number, quantity: number = 1, dispatch: Dispatch) => {
         try {
-            await basketService.incrementItemQuantity(itemId, quantity, dispatch);
+          await basketService.incrementItemQuantity(itemId, quantity, dispatch);
         } catch (error) {
-            console.error("Failed to increment item quantity in basket:", error);
-            throw error;
+          console.error("Failed to increment item quantity in basket:", error);
+          throw error;
         }
-    },
-    decrementItemQuantity: async (itemId: number, quantity: number = 1, dispatch: Dispatch) => {
+      },
+      decrementItemQuantity: async (itemId: number, quantity: number = 1, dispatch: Dispatch) => {
         try {
-            await basketService.decrementItemQuantity(itemId, quantity, dispatch);
+          await basketService.decrementItemQuantity(itemId, quantity, dispatch);
         } catch (error) {
-            console.error("Failed to decrement item quantity in basket:", error);
-            throw error;
+          console.error("Failed to decrement item quantity in basket:", error);
+          throw error;
         }
-    },
-    setBasket: async (basket: Basket, dispatch: Dispatch) => {
+      },
+      setBasket: async (basket: Basket, dispatch: Dispatch) => {
         try {
-            await basketService.setBasket(basket, dispatch);
+          await basketService.setBasket(basket, dispatch);
         } catch (error) {
-            console.error("Failed to set basket:", error);
-            throw error;
+          console.error("Failed to set basket:", error);
+          throw error;
         }
-    },
-    deleteBasket: async(basketId: string) =>{
+      },
+      deleteBasket: async(basketId: string) =>{
         try{
-            await basketService.deleteBasket(basketId);
+          await basketService.deleteBasket(basketId);
         } catch(error){
-            console.log("Failed to delete the Basket");
-            throw error;
+          console.log("Failed to delete the Basket");
+          throw error;
         }
-    }
+      }
 }
 
 const Account = {
-    login: (values:any) =>requests.post('auth/login', values)
+  login: (values:any) =>requests.post('auth/login', values)
+}
+
+const Orders ={
+  list:() => requests.get('orders'),
+  fetch:(id:number) => requests.get(`orders/${id}`),
+  create:(values:any) => requests.post('orders', values)
 }
 
 
 const agent = {
     Store,
     Basket,
-    Account
+    Account,
+    Orders
 }
 
 export default agent;

@@ -19,16 +19,20 @@ public class JwtHelper {
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
     private String secret = "f27dacd186810e78c0fd8ba65ecf3f1524ff087c5e86773d5172d424b3fd201f";
 
-    public String getUserNameFromToken(String token){ return getClaimFromToken(token, Claims::getSubject);}
+    public String getUserNameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
 
-    public Date getExpirationDateFromToken(String token) {return getClaimFromToken(token, Claims::getExpiration);}
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return generateToken(claims, userDetails.getUsername());
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails){
+    public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUserNameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
@@ -39,7 +43,7 @@ public class JwtHelper {
     }
 
     private String generateToken(Map<String, Object> claims, String subject) {
-        //Convert the secret string key into a Key object
+        // Convert the secret string key into a Key object
         Key hmacKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
 
         return Jwts.builder()

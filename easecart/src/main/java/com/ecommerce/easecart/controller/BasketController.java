@@ -1,7 +1,7 @@
 package com.ecommerce.easecart.controller;
 
-import com.ecommerce.easecart.entitiy.Basket;
-import com.ecommerce.easecart.entitiy.BasketItem;
+import com.ecommerce.easecart.entity.Basket;
+import com.ecommerce.easecart.entity.BasketItem;
 import com.ecommerce.easecart.model.BasketItemResponse;
 import com.ecommerce.easecart.model.BasketResponse;
 import com.ecommerce.easecart.service.BasketService;
@@ -27,21 +27,22 @@ public class BasketController {
     }
 
     @GetMapping("/{basketId}")
-    public BasketResponse getBasketById(@PathVariable String basketId){
+    public BasketResponse getBasketById(@PathVariable String basketId) {
         return basketService.getBasketById(basketId);
     }
+
     @DeleteMapping("/{basketId}")
-    public void deleteBasketById(@PathVariable String basketId){
+    public void deleteBasketById(@PathVariable String basketId) {
         basketService.deleteBasketById(basketId);
     }
 
     @PostMapping
-    public ResponseEntity<BasketResponse> createBasket(@RequestBody BasketResponse basketResponse){
-        //convert this basket response to basket entity
+    public ResponseEntity<BasketResponse> createBasket(@RequestBody BasketResponse basketResponse) {
+        // convert this basket response to basket entity
         Basket basket = convertToBasketEntity(basketResponse);
-        //call the service method to create the basket
+        // call the service method to create the basket
         BasketResponse createdBasket = basketService.createBasket(basket);
-        //Return the Created Basket
+        // Return the Created Basket
         return new ResponseEntity<>(createdBasket, HttpStatus.CREATED);
     }
 

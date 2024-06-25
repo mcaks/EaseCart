@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EasecartApplication {
+public class easecartApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EasecartApplication.class, args);
+		SpringApplication.run(easecartApplication.class, args);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.ecommerce.easecart.model;
 
+import com.ecommerce.easecart.entity.Brand;
+import com.ecommerce.easecart.entity.Type;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
