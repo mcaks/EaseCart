@@ -23,4 +23,13 @@ public class Register {
     @Column(name = "Name")
     private String name;
 
+    @Column(name = "Address")
+    private String address;
+
+    @Column(name = "Country")
+    private String country;
+
+    @Column(name = "Post")
+    private String post;
 }
+

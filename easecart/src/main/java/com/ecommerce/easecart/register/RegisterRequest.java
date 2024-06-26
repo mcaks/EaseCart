@@ -15,4 +15,7 @@ public class RegisterRequest {
     private String email;
     private String password;
     private String confirmPassword;
+    private String address;
+    private String country;
+    private String post;
 }

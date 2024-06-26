@@ -37,6 +37,9 @@ public class RegisterServiceImpl implements RegisterService {
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setAddress(registerRequest.getAddress());
+        user.setCountry(registerRequest.getCountry());
+        user.setPost(registerRequest.getPost());
 
         User savedUser = userRepository.save(user);
         RegisterResponse registerResponse = convertToRegisterResponse(savedUser);
@@ -49,6 +52,9 @@ public class RegisterServiceImpl implements RegisterService {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .address(user.getAddress())
+                .country(user.getCountry())
+                .post(user.getPost())
                 .build();
     }
 }

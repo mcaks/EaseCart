@@ -30,6 +30,9 @@ export default function RegisterPage() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [registerAddress, setRegisterAddress] = useState('');
+    const [registerCountry, setRegisterCountry] = useState('');
+    const [registerPost, setRegisterPost] = useState('');
     const [registerResponseMessage, setRegisterResponseMessage] = useState('');
     const [selectedTab, setSelectedTab] = useState(0);
 
@@ -55,6 +58,9 @@ export default function RegisterPage() {
                     email: registerEmail,
                     password: registerPassword,
                     confirmPassword: confirmPassword,
+                    address: registerAddress,
+                    country: registerCountry,
+                    post: registerPost,
                 }),
             });
             const data = await response.json();
@@ -64,6 +70,9 @@ export default function RegisterPage() {
                 setRegisterEmail('');
                 setRegisterPassword('');
                 setConfirmPassword('');
+                setRegisterAddress('');
+                setRegisterCountry('');
+                setRegisterPost('');
             } else {
                 setRegisterResponseMessage(data.message || 'Failed to register. Please try again.');
             }
@@ -138,6 +147,33 @@ export default function RegisterPage() {
                                 sx={{ marginBottom: '20px' }}
                                 required
                             />
+                            <TextField
+                                label="Address"
+                                variant="outlined"
+                                fullWidth
+                                value={registerAddress}
+                                onChange={(e) => setRegisterAddress(e.target.value)}
+                                sx={{ marginBottom: '20px' }}
+                                required
+                            />
+                            <TextField
+                                label="Country"
+                                variant="outlined"
+                                fullWidth
+                                value={registerCountry}
+                                onChange={(e) => setRegisterCountry(e.target.value)}
+                                sx={{ marginBottom: '20px' }}
+                                required
+                            />
+                            <TextField
+                                label="Post"
+                                variant="outlined"
+                                fullWidth
+                                value={registerPost}
+                                onChange={(e) => setRegisterPost(e.target.value)}
+                                sx={{ marginBottom: '20px' }}
+                                required
+                            />
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -153,6 +189,9 @@ export default function RegisterPage() {
                                 {registerResponseMessage}
                             </Typography>
                         )}
+                        <Typography variant="body2" color="textSecondary" sx={{ marginTop: '20px' }}>
+                            You pay with cash on delivery, that's why you add address!!
+                        </Typography>
                     </>
                 )}
             </Box>
