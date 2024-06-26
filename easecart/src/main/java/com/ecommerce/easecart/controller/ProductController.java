@@ -2,6 +2,9 @@ package com.ecommerce.easecart.controller;
 
 import com.ecommerce.easecart.model.*;
 
+import com.ecommerce.easecart.register.RegisterRequest;
+import com.ecommerce.easecart.register.RegisterResponse;
+import com.ecommerce.easecart.register.RegisterService;
 import com.ecommerce.easecart.service.BrandService;
 import com.ecommerce.easecart.service.ProductService;
 import com.ecommerce.easecart.service.TypeService;
@@ -80,6 +83,6 @@ public class ProductController {
         List<TypeResponse> typeResponses = typeService.getAllTypes();
         return new ResponseEntity<>(typeResponses, HttpStatus.OK);
     }
-
+    
 
 }

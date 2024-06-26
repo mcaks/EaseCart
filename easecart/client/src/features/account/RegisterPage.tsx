@@ -27,7 +27,6 @@ const theme = createTheme({
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [registerName, setRegisterName] = useState('');
-    const [registerDescription, setRegisterDescription] = useState('');
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -38,7 +37,7 @@ export default function RegisterPage() {
         navigate('/');
     };
 
-    const handleRegisterSubmit = async (event: React.FormEvent) => {
+    const handleRegisterSubmit = async (event) => {
         event.preventDefault();
         if (registerPassword !== confirmPassword) {
             setRegisterResponseMessage('Passwords do not match. Please try again.');
@@ -46,35 +45,34 @@ export default function RegisterPage() {
         }
 
         try {
-            const response = await fetch('http://localhost:8081/api/products/registers', {
+            const response = await fetch('http://localhost:8081/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     name: registerName,
-                    description: registerDescription,
                     email: registerEmail,
                     password: registerPassword,
+                    confirmPassword: confirmPassword,
                 }),
             });
             const data = await response.json();
             if (response.ok) {
-                setRegisterResponseMessage(`Register "${data.name}" added successfully!`);
+                setRegisterResponseMessage(`User "${data.name}" registered successfully!`);
                 setRegisterName('');
-                setRegisterDescription('');
                 setRegisterEmail('');
                 setRegisterPassword('');
                 setConfirmPassword('');
             } else {
-                setRegisterResponseMessage('Failed to add register. Please try again.');
+                setRegisterResponseMessage(data.message || 'Failed to register. Please try again.');
             }
         } catch (error) {
             setRegisterResponseMessage('An error occurred. Please try again.');
         }
     };
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleTabChange = (event, newValue) => {
         setSelectedTab(newValue);
     };
 
@@ -93,8 +91,8 @@ export default function RegisterPage() {
                     padding: '20px',
                 }}
             >
-                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Add Register">
-                    <Tab label="Add Register" />
+                <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Register">
+                    <Tab label="Register" />
                 </Tabs>
                 {selectedTab === 0 && (
                     <>
@@ -157,7 +155,6 @@ export default function RegisterPage() {
                         )}
                     </>
                 )}
-                
             </Box>
         </ThemeProvider>
     );
