@@ -1,27 +1,29 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { router } from "../router/Routes";
 import { toast } from "react-toastify";
+import basketService from "./basketService";
 import { Dispatch } from "redux";
 import { Product } from "../models/product";
 import { Basket } from "../models/basket";
 
-axios.defaults.baseURL = 'http://localhost:8081/api/';
+axios.defaults.baseURL ='http://localhost:8081/api/';
 
 const idle = () => new Promise(resolve => setTimeout(resolve, 100));
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(async response => {
     await idle();
-    return response;
+    return response
 }, (error: AxiosError) => {
-    const { status } = error.response as AxiosResponse;
+    const { status } = error.response as AxiosResponse; 
     switch (status) {
         case 404:
             toast.error("Resource not found");
-            // Handle routing or display not found page
+            router.navigate('/not-found');
             break;
         case 500:
             toast.error("Internal server error occurred");
-            // Handle routing or display server error page
+            router.navigate('/server-error');
             break;
         default:
             break;
@@ -33,13 +35,13 @@ const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
     post: (url: string, body: object) => axios.post(url, body).then(responseBody),
     put: (url: string, body: object) => axios.put(url, body).then(responseBody),
-    delete: (url: string) => axios.delete(url).then(responseBody)
+    delete: (url: string) => axios.delete(url).then(responseBody)  // Fixed delete method
 };
 
 const Store = {
     apiUrl: 'http://localhost:8081/api/products',
     list: (page: number, size: number, brandId?: number, typeId?: number, url?: string) => {
-        let requestUrl = url || `products?page=${page - 1}&size=${size}`;
+        let requestUrl = url || `products?page=${page-1}&size=${size}`;
         if (brandId !== undefined) {
             requestUrl += `&brandId=${brandId}`;
         }
@@ -52,13 +54,12 @@ const Store = {
     types: () => requests.get('products/types').then(types => [{ id: 0, name: 'All' }, ...types]),
     brands: () => requests.get('products/brands').then(brands => [{ id: 0, name: 'All' }, ...brands]),
     search: (keyword: string) => requests.get(`products?keyword=${keyword}`),
-    deleteProduct: (productId: number) => requests.delete(`products/${productId}`)
+    deleteProduct: (productId: number) => requests.delete(`products/${productId}`)  // Added deleteProduct method
 };
 
 const Basket = {
     get: async () => {
         try {
-            // Assuming basketService handles basket retrieval
             return await basketService.getBasket();
         } catch (error) {
             console.error("Failed to get Basket: ", error);
@@ -111,27 +112,27 @@ const Basket = {
         try {
             await basketService.deleteBasket(basketId);
         } catch (error) {
-            console.error("Failed to delete the Basket:", error);
+            console.log("Failed to delete the Basket");
             throw error;
         }
     }
-};
+}
 
 const Account = {
     login: (values: any) => requests.post('auth/login', values)
-};
+}
 
 const Orders = {
     list: () => requests.get('orders'),
     fetch: (id: number) => requests.get(`orders/${id}`),
     create: (values: any) => requests.post('orders', values)
-};
+}
 
 const agent = {
     Store,
     Basket,
     Account,
     Orders
-};
+}
 
 export default agent;
