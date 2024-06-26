@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     private final TypeRepository typeRepository;
 
     public ProductServiceImpl(ProductRepository productRepository, BrandRepository brandRepository,
-            TypeRepository typeRepository) {
+                              TypeRepository typeRepository) {
         this.productRepository = productRepository;
         this.brandRepository = brandRepository;
         this.typeRepository = typeRepository;
@@ -31,11 +31,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Integer productId) {
-        log.info("fetching Product by Id: {}", productId);
+        log.info("Fetching product by Id: {}", productId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product doesn't exist"));
         ProductResponse productResponse = convertToProductResponse(product);
-        log.info("Fetched Product by Product Id: {}", productId);
+        log.info("Fetched product by Id: {}", productId);
         return productResponse;
     }
 
@@ -44,18 +44,15 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> spec = Specification.where(null);
 
         if (brandId != null) {
-            spec = spec
-                    .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("brand").get("id"), brandId));
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("brand").get("id"), brandId));
         }
 
         if (typeId != null) {
-            spec = spec
-                    .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("type").get("id"), typeId));
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("type").get("id"), typeId));
         }
 
         if (keyword != null && !keyword.isEmpty()) {
-            spec = spec
-                    .and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + keyword + "%"));
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + keyword + "%"));
         }
 
         return productRepository.findAll(spec, pageable).map(this::convertToProductResponse);
@@ -79,6 +76,13 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(product);
         return convertToProductResponse(product);
+    }
+
+    @Override
+    public void deleteProduct(Integer productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product doesn't exist"));
+        productRepository.delete(product);
     }
 
     private ProductResponse convertToProductResponse(Product product) {

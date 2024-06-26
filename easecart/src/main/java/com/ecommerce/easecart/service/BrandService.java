@@ -9,4 +9,5 @@ public interface BrandService {
     List<BrandResponse> getAllBrands();
 
     BrandResponse addBrand(BrandRequest brandRequest); // New method to add a brand
+    //void deleteBrand(Integer brandId);
 }

@@ -13,4 +13,5 @@ public interface ProductService {
     Page<ProductResponse> getProducts(Pageable pageable, Integer brandId, Integer typeId, String keyword);
 
     ProductResponse addProduct(ProductRequest ProductRequest);
+    void deleteProduct(Integer productId);
 }

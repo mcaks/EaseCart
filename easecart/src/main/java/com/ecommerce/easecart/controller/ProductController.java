@@ -65,6 +65,12 @@ public class ProductController {
         BrandResponse brandResponse = brandService.addBrand(brandRequest);
         return new ResponseEntity<>(brandResponse, HttpStatus.CREATED);
     }
+    /*@DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable("id") Integer brandId) {
+        brandService.deleteBrand(brandId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }*/
+
 
     @PostMapping("/types")
     public ResponseEntity<TypeResponse> createType(@RequestBody TypeRequest typeRequest) {
@@ -83,6 +89,11 @@ public class ProductController {
         List<TypeResponse> typeResponses = typeService.getAllTypes();
         return new ResponseEntity<>(typeResponses, HttpStatus.OK);
     }
-    
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Integer productId) {
+        productService.deleteProduct(productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

@@ -1,16 +1,17 @@
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { Product } from "../../app/models/product";
 
 export default function ProductDetails(){
     const { basket } = useAppSelector(state=>state.basket);
     const dispatch = useAppDispatch();
+
     const { id } = useParams<{ id: string }>();
-    const [product, setProduct] = useState<Product | null>();
+    const [product, setProduct] = useState<Product>({ id: 0, name: '', description: '', price: 0, pictureUrl: '', productType: '', productBrand: '' });
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(0);
     const [submitting, setSubmitting] = useState(false);
@@ -36,12 +37,16 @@ export default function ProductDetails(){
     };
 
     useEffect(() => {
-        if (item) setQuantity(item.quantity);
-        id && agent.Store.details(parseInt(id))       
-            .then(response => setProduct(response))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
-    }, [id, item]);
+        if (id) {
+            agent.Store.details(parseInt(id))       
+                .then(response => setProduct(response))
+                .catch(error => {
+                    console.error("Failed to fetch product:", error);
+                    setProduct(null); // or handle error state accordingly
+                })
+                .finally(() => setLoading(false));
+        }
+    }, [id]);
 
     const inputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(event.target.value);
@@ -77,11 +82,22 @@ export default function ProductDetails(){
             setSubmitting(false);
         }
     };
+
+    const deleteProduct = async () => {
+        try {
+            await agent.Store.deleteProduct(parseInt(id));
+            // Redirect or handle success using window.location
+            window.location.href = '/products'; // Redirect to products page after deletion
+        } catch (error) {
+            console.error("Failed to delete product:", error);
+            // Handle error state or alert user
+        }
+    };
     
-    
+
     if (loading) return <h3>Loading....</h3>;
     if (!product) return <h3>Product not found</h3>;
-    
+
     return (
         <Grid container spacing={6}>
             <Grid item xs={6}>
@@ -135,6 +151,19 @@ export default function ProductDetails(){
                             onClick={updateQuantity}
                         >
                             {item ? 'Update Quantity' : 'Add to Cart'}
+                        </LoadingButton>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <LoadingButton
+                            sx={{ height: '55px', marginTop: '10px' }}
+                            color='error'
+                            size='large'
+                            variant='contained'
+                            fullWidth
+                            loading={submitting}
+                            onClick={deleteProduct}
+                        >
+                            Delete Product
                         </LoadingButton>
                     </Grid>
                 </Grid>
